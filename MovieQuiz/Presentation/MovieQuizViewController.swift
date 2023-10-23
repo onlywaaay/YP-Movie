@@ -15,7 +15,7 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
     
-    struct QuizQuestion {
+    private struct QuizQuestion {
         // строка с названием фильма,
         // совпадает с названием картинки афиши фильма в Assets
         let image: String
@@ -56,7 +56,7 @@ final class MovieQuizViewController: UIViewController {
                   text: "Рейтинг этого фильма больше чем 6?",
                   correctAnswer: false)]
     
-    struct QuizResultsViewModel {
+    private struct QuizResultsViewModel {
         // строка с заголовком алерта
         let title: String
         // строка с текстом о количестве набранных очков
@@ -66,7 +66,7 @@ final class MovieQuizViewController: UIViewController {
     }
     
     // вью модель для состояния "Вопрос показан"
-    struct QuizStepViewModel {
+    private struct QuizStepViewModel {
         // картинка с афишей фильма с типом UIImage
         let image: UIImage
         // вопрос о рейтинге квиза
@@ -107,29 +107,27 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func showAnswerResult(isCorrect: Bool) {
-        
         if isCorrect {
             correctAnswers += 1
         }
         imageView.layer.masksToBounds = true // даём разрешение на рисование рамки
         imageView.layer.borderWidth = 8 // толщина рамки
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor// делаем рамку белой
-        imageView.layer.cornerRadius = 6 // радиус скругления углов рамки
+        imageView.layer.cornerRadius = 20 // радиус скругления углов рамки
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.showNextQuestionOrResults()
         }
-        
-        
     }
     
     // приватный метод, который содержит логику перехода в один из сценариев
     // метод ничего не принимает и ничего не возвращает
     private func showNextQuestionOrResults() {
+        imageView.layer.borderWidth = 0
         if currentQuestionIndex == questions.count - 1 { // 1
             let text = "Ваш результат: \(correctAnswers)/10"
             let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!!!!",
+                title: "Этот раунд окончен!",
                 text: text,
                 buttonText: "Сыграть еще раз")
             show(quiz: viewModel)
